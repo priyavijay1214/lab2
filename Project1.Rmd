@@ -55,7 +55,9 @@ df <- df %>%
          city_of_austin_resident, primary_music_ecosystem_sector,
          music_business_structure, work_location, years_experience,
          music_education, community_or_business_participation)
-
+```
+-------
+```{r}
 df <- df %>%
   rename(
     county = county_of_residence,
@@ -68,7 +70,10 @@ df <- df %>%
     music_edu = music_education,
     community_part = community_or_business_participation
   )
+```
+-------
 
+```{r}
 df <- df %>%
   mutate(
     distance_miles = as.numeric(distance_miles),
@@ -81,7 +86,9 @@ df <- df %>%
     music_edu = as.factor(music_edu),
     community_part = as.factor(community_part)
   )
-
+```
+-------
+```{r}
 df <- df %>%
   mutate(
     distance_cat = case_when(
@@ -143,53 +150,66 @@ var_table <- data.frame(
 knitr::kable(var_table, caption = "Variables of Interest in the 2022 Austin Music Census")
 ```
 # **Univariate Analyses**
-
+## Univariate analysis 1
 ```{r}
 # 1. Distance histogram
 ggplot(df, aes(x = distance_miles)) +
   geom_histogram(bins = 30, fill = "#4682B4", color = "white") +
   labs(title = "Distribution of Distance from Downtown", x = "Distance (miles)", y = "Count")
-
+```
+## Univariate analysis 2
+```{r}
 # 2. Sector distribution
 ggplot(df, aes(x = sector)) +
   geom_bar(fill = "#8FBC8F") +
   labs(title = "Distribution of Primary Music Ecosystem Sector", x = "Sector", y = "Count") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
+```
+## Univariate analysis 3
+```{r}
 # 3. Distance category counts
 ggplot(df, aes(x = distance_cat)) +
   geom_bar(fill = "#FFB347") +
   labs(title = "Respondents by Distance Category", x = "Distance Category", y = "Count")
-
+```
+## Univariate analysis 4
+```{r}
 # 4. Experience distribution
 ggplot(df, aes(x = years_exp)) +
   geom_histogram(bins = 25, fill = "#9370DB", color = "white") +
   labs(title = "Distribution of Years of Experience", x = "Years", y = "Count")
 ```
 
-The median distance is about `r round(median_distance, 1)` miles. Most respondents live within 15 miles of downtown, showing high centralization of music professionals.
+The <strong>median distance</strong> is about `r round(median_distance, 1)` miles. Most respondents live within 15 miles of downtown, showing high centralization of music professionals.
 Years of experience vary widely, with clusters under 10 years and over 20 years.
 Creative sectors appear to dominate participation.
 
 # **Bivariate Analyses**
 
+## Bivariate Analysis 1
 ```{r}
 # 1. Experience vs Distance scatter
 ggplot(df, aes(x = distance_miles, y = years_exp)) +
   geom_point(alpha = 0.6, color = "#2E8B57") +
   geom_smooth(method = "lm", se = TRUE, color = "black") +
   labs(title = "Experience vs Distance from Downtown", x = "Distance (miles)", y = "Years of Experience")
-
+```
+## Bivariate Analysis 2
+```{r}
 # 2. Boxplot of Experience by Distance Category
 ggplot(df, aes(x = distance_cat, y = years_exp)) +
   geom_boxplot(fill = "#FFA07A") +
   labs(title = "Years of Experience by Distance Category", x = "Distance Category", y = "Years Experience")
-
+```
+## Bivariate Analysis 3
+```{r}
 # 3. Bar plot of Sector by Distance Category
 ggplot(df, aes(x = distance_cat, fill = sector)) +
   geom_bar(position = "fill") +
   labs(title = "Sector Composition Across Distance Categories", x = "Distance Category", y = "Proportion")
-
+```
+## Bivariate Analysis 4
+```{r}
 # 4. Multivariate scatter: Experience vs Distance colored by Sector, sized by Community Participation
 ggplot(df, aes(x = distance_miles, y = years_exp, color = sector, size = as.numeric(as.factor(community_part)))) +
   geom_point(alpha = 0.7) +
@@ -197,7 +217,7 @@ ggplot(df, aes(x = distance_miles, y = years_exp, color = sector, size = as.nume
        x = "Distance (miles)", y = "Years Experience")
 ```
 
-There appears to be a weak relationship between distance and experience. The boxplot suggests that highly experienced individuals are slightly more likely to live closer to downtown. Sector composition varies by geography: creative roles dominate the core, while business-related roles appear more suburban. The multivariate plot shows overlap among sectors; larger points (greater community participation) cluster near downtown.
+There appears to be a <strong>weak relationship between distance and experience</strong>. The boxplot suggests that highly experienced individuals are slightly more likely to live closer to downtown. Sector composition varies by geography: creative roles dominate the core, while business-related roles appear more suburban. The multivariate plot shows overlap among sectors; larger points (greater community participation) cluster near downtown.
 
 # **Choice Element**
 
